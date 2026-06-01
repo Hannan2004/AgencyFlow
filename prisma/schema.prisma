@@ -22,7 +22,8 @@ model Agency {
   brandColor String?         @default("#2563eb")
 
   memberships Membership[]
-
+  invites     Invite[]
+  
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
 }
@@ -57,4 +58,15 @@ model Membership {
   @@unique([userId, agencyId])
   @@index([agencyId])
   @@index([userId])
+}
+
+model Invite {
+  id String @id @default(cuid())
+  email String
+  token String @unique
+  agencyId String
+  agency Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  acceptedAt DateTime?
+  expiresAt DateTime?
 }
